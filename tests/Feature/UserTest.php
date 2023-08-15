@@ -4,7 +4,6 @@ namespace Tests\Feature;
 
 use Tests\TestCase;
 use App\Models\User;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class UserTest extends TestCase
@@ -75,6 +74,7 @@ class UserTest extends TestCase
     public function shouldUpdateAUserSucessfully(): void
     {
         $user = User::factory()->create();
+        $user2 = User::factory()->create();
 
         $newName = fake()->name();
         $newEmail = fake()->unique()->safeEmail();
@@ -87,6 +87,8 @@ class UserTest extends TestCase
         $response->assertStatus(200);
         $this->assertEquals($newName, $response["name"]);
         $this->assertEquals($newEmail, $response["email"]);
+
+        $this->assertEquals($user2->toArray(), User::find($user2["id"])->toArray());
     }
 
     /**

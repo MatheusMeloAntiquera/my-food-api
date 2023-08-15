@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\RestaurantController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,5 +21,9 @@ use App\Http\Controllers\UserController;
 // });
 
 Route::resource('user', UserController::class)->except([
+    'create', 'edit'
+]);
+
+Route::resource('restaurant', RestaurantController::class)->except([
     'create', 'edit'
 ]);
