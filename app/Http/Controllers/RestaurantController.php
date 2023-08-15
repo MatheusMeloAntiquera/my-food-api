@@ -51,8 +51,14 @@ class RestaurantController extends Controller
 
     public function destroy(Request $request, string $id)
     {
-        $user = Restaurant::find($id);
-        $user->delete();
+        $restaurant = Restaurant::find($id);
+        $restaurant->delete();
         return response()->json(null, 204);
+    }
+
+    public function products(Request $request, string $restaurantId)
+    {
+        $restaurant = Restaurant::find($restaurantId);
+        return response()->json(Restaurant::find($restaurant->id)->products->toArray(), 200);
     }
 }

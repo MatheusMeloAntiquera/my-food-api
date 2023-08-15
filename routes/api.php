@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RestaurantController;
 
 /*
@@ -16,14 +17,18 @@ use App\Http\Controllers\RestaurantController;
 |
 */
 
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
-
 Route::resource('user', UserController::class)->except([
     'create', 'edit'
 ]);
 
 Route::resource('restaurant', RestaurantController::class)->except([
     'create', 'edit'
+]);
+
+Route::prefix('restaurant')->group(function () {
+    Route::get('/{id}/products', [RestaurantController::class, 'products']);
+});
+
+Route::resource('product', ProductController::class)->except([
+   'index', 'create', 'edit'
 ]);

@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
+use App\Models\Product;
 use App\Models\Restaurant;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -115,5 +116,28 @@ class RestaurantTest extends TestCase
         $response->assertStatus(204);
         $this->assertEmpty(Restaurant::find($restaurant["id"]));
         $this->assertNotEmpty(Restaurant::find($restaurant2["id"]));
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function shouldReturnAllProductsOfTheRestaurant(): void
+    {
+        $restaurant = Restaurant::factory()->create();
+        $products = Product::factory()->count(3)->create(['restaurant_id' => $restaurant['id']]);
+
+        $restaurant2 = Restaurant::factory()->create();
+        Product::factory()->count(3)->create(['restaurant_id' => $restaurant2['id']]);
+
+        $response = $this->getJson("/api/restaurant/{$restaurant['id']}/products");
+        $response->assertStatus(200);
+
+        $json = $response->getOriginalContent();
+
+        $this->assertNotEmpty($json);
+        $this->assertIsArray($json);
+        $this->assertCount(3, $json);
+        $this->assertEquals($products->toArray(), $json);
     }
 }
