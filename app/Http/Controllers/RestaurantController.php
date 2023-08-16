@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Order;
 use App\Models\Restaurant;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -60,5 +61,11 @@ class RestaurantController extends Controller
     {
         $restaurant = Restaurant::find($restaurantId);
         return response()->json(Restaurant::find($restaurant->id)->products->toArray(), 200);
+    }
+
+    public function orders(Request $request, string $restaurantId)
+    {
+        $orders = Order::where('restaurant_id', $restaurantId)->get();
+        return response()->json($orders->toArray(), 200);
     }
 }

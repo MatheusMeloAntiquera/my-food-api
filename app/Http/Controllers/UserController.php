@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 
@@ -44,5 +45,11 @@ class UserController extends Controller
         $user = User::find($id);
         $user->delete();
         return response()->json(null, 204);
+    }
+
+    public function orders(Request $request, string $customerId)
+    {
+        $orders = Order::where('customer_id', $customerId)->get();
+        return response()->json($orders->toArray(), 200);
     }
 }
